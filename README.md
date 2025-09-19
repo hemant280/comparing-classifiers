@@ -391,4 +391,34 @@ The 'Decision Tree' classifiers perfrmes for this dataset with training accuracy
     - Test accuracy for tuned Decision Tree: 0.6816
     - Test accuracy for tuned Support Vector Machine: 0.7521
 
-    
+## Model Evaluation Report: Bank Marketing Campaign Classifier Comparison
+
+### Executive Summary
+
+This report presents a comprehensive evaluation of four machine learning classifiers developed to predict customer subscription to long-term deposits for a Portuguese banking institution. The analysis compared K-Nearest Neighbors, Logistic Regression, Decision Trees, and Support Vector Machines using data from 17 marketing campaigns conducted between 2008-2010.
+
+### Context and Objective
+The Portuguese banking institution conducted direct marketing campaigns primarily through telephone calls to promote long-term deposit products with attractive interest rates. The business challenge was to improve campaign efficiency by better identifying customers likely to subscribe.
+
+### Business Metrics
+- **Dataset Size:** 41,188 customer contacts across 17 campaigns
+- **Time Period:** May 2008 to November 2010
+- **Baseline Success Rate:** 8% (6,499 successes out of 79,354 total contacts)
+- **Business Goal:** Increase campaign success rates while optimizing resource allocation
+
+### Success Criteria
+The predictive model aims to:
+1. Significantly exceed the 8% baseline success rate
+2. Provide actionable customer segmentation insights
+3. Optimize marketing resource allocation
+4. Enable data-driven campaign targeting decisions
+
+**Key Findings:**
+- Support Vector Machine achieved the highest performance with 75.21% test accuracy after hyperparameter tuning
+- Hyperparameter optimization significantly improved all models, with SVM showing the largest gain (25.62 percentage points)
+- The baseline success rate of 8% was substantially improved across all models
+- Economic context features showed high multicollinearity and were removed to improve model efficiency
+
+**Recommendation:** Deploy the tuned SVM model for production use to optimize marketing campaign targeting and resource allocation.
+
+
