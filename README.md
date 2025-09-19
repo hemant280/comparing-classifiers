@@ -365,25 +365,25 @@ The 'Decision Tree' classifiers perfrmes for this dataset with training accuracy
     ```
     #### GridSearchCV execution logs:
     <hr/>
-    - Running GridSearchCV for K-Nearest Neighbors...
-        - Fitting 5 folds for each of 24 candidates, totalling 120 fits
-        - Best parameters for K-Nearest Neighbors: {'classifier': KNeighborsClassifier(), 'classifier__n_neighbors': 3, 'classifier__weights': 'distance', 'pca__n_components': 3}
-        - Best cross-validation accuracy for K-Nearest Neighbors: 0.6811
+- Running GridSearchCV for K-Nearest Neighbors...
+    - Fitting 5 folds for each of 24 candidates, totalling 120 fits
+    - Best parameters for K-Nearest Neighbors: {'classifier': KNeighborsClassifier(), 'classifier__n_neighbors': 3, 'classifier__weights': 'distance', 'pca__n_components': 3}
+    - Best cross-validation accuracy for K-Nearest Neighbors: 0.6811
     <hr/>
-    - Running GridSearchCV for Logistic Regression...
-        - Fitting 5 folds for each of 18 candidates, totalling 90 fits
-        - Best parameters for Logistic Regression: {'classifier': LogisticRegression(random_state=42, solver='liblinear'), 'classifier__C': 0.1, 'classifier__penalty': 'l1', 'pca__n_components': 1}
-        - Best cross-validation accuracy for Logistic Regression: 0.5073
+- Running GridSearchCV for Logistic Regression...
+    - Fitting 5 folds for each of 18 candidates, totalling 90 fits
+    - Best parameters for Logistic Regression: {'classifier': LogisticRegression(random_state=42, solver='liblinear'), 'classifier__C': 0.1, 'classifier__penalty': 'l1', 'pca__n_components': 1}
+    - Best cross-validation accuracy for Logistic Regression: 0.5073
     <hr/>
-    - Running GridSearchCV for Decision Tree...
-        - Fitting 5 folds for each of 45 candidates, totalling 225 fits
-        - Best parameters for Decision Tree: {'classifier': DecisionTreeClassifier(random_state=42), 'classifier__max_depth': None, 'classifier__min_samples_split': 2, 'pca__n_components': 3}
-        - Best cross-validation accuracy for Decision Tree: 0.6423
+- Running GridSearchCV for Decision Tree
+    - Fitting 5 folds for each of 45 candidates, totalling 225 fits
+    - Best parameters for Decision Tree: {'classifier': DecisionTreeClassifier(random_state=42), 'classifier__max_depth': None, 'classifier__min_samples_split': 2, 'pca__n_components': 3}
+    - Best cross-validation accuracy for Decision Tree: 0.6423
     <hr/>
-    - Running GridSearchCV for Support Vector Machine...
-        - Fitting 5 folds for each of 36 candidates, totalling 180 fits
-        - Best parameters for Support Vector Machine: {'classifier': SVC(random_state=42), 'classifier__C': 10, 'classifier__gamma': 'auto', 'classifier__kernel': 'rbf', 'pca__n_components': 3}
-        - Best cross-validation accuracy for Support Vector Machine: 0.5086
+- Running GridSearchCV for Support Vector Machine...
+    - Fitting 5 folds for each of 36 candidates, totalling 180 fits
+    - Best parameters for Support Vector Machine: {'classifier': SVC(random_state=42), 'classifier__C': 10, 'classifier__gamma': 'auto', 'classifier__kernel': 'rbf', 'pca__n_components': 3}
+    - Best cross-validation accuracy for Support Vector Machine: 0.5086
 
     **Evaluating best estimators on the test set:**
     - Test accuracy for tuned K-Nearest Neighbors: 0.7050
