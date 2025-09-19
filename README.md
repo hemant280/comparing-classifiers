@@ -2,7 +2,9 @@
 
 Berkeley AI/ML Assignment 17.1: Comparing Classifiers
 
-[Juypter Notebook](https://github.com/hemant280/comparing-classifiers/blob/main/analysis.ipynb).
+[Juypter Notebook](https://github.com/hemant280/comparing-classifiers/blob/main/analysis.ipynb)
+
+[Environment Details (requrement.txt)](https://github.com/hemant280/comparing-classifiers/requirement.txt)
 
 **OVERVIEW**
 
@@ -23,10 +25,12 @@ The goal is to create a predictive model to identify clients likely to subscribe
 Following steps taken to prepare and train model.
 - Preprocessing numerical columns
 - Preprocessing categorical columns
-- Identify correlations in the training data
+- Identify correlations
 - Principal Component Analysis (PCA) to reduce the feature count
 - Split the dataset for training and testing
 - Fixing the class imbalance using SMOTE
+    - _Additional python library is required (imbalanced-learn) (check the requirement.txt)_
+
 - Fiting the model (classifiers):
     - k-nearest neighbors 
     - logistic regression
@@ -42,7 +46,8 @@ Following steps taken to prepare and train model.
 - Data Set Characteristics: Multivariate
 - Attribute Characteristics: Real
 - Number of Instances: 41188
-- Number of Attributes: 20
+- Number of Input Attributes: 20
+- Number of Output Attribute: 1
 - Missing Values: No
 
 **Additional Information about data**
@@ -189,4 +194,42 @@ Converting pdays to categorical variable as Contacted or Not contacted previousl
 
 Using label encoding for all the categorical columns
 
+Merging part_1 and part_2 data frame
+```
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 41188 entries, 0 to 41187
+Data columns (total 20 columns):
+ #   Column          Non-Null Count  Dtype  
+---  ------          --------------  -----  
+ 0   job             41188 non-null  int8   
+ 1   marital         41188 non-null  int8   
+ 2   education       41188 non-null  int8   
+ 3   default         41188 non-null  int8   
+ 4   housing         41188 non-null  int8   
+ 5   loan            41188 non-null  int8   
+ 6   contact         41188 non-null  int8   
+ 7   month           41188 non-null  int8   
+ 8   day_of_week     41188 non-null  int8   
+ 9   poutcome        41188 non-null  int8   
+ 10  y               41188 non-null  int8   
+ 11  age             41188 non-null  float64
+ 12  campaign        41188 non-null  float64
+ 13  pdays           41188 non-null  int64  
+ 14  previous        41188 non-null  float64
+ 15  emp.var.rate    41188 non-null  float64
+ 16  cons.price.idx  41188 non-null  float64
+ 17  cons.conf.idx   41188 non-null  float64
+ 18  euribor3m       41188 non-null  float64
+ 19  nr.employed     41188 non-null  float64
+dtypes: float64(8), int64(1), int8(11)
+memory usage: 3.3 MB
+```
 
+
+**Plot Target variable distribution**
+
+!["Target Variable distribution"](./images/target_variable_distribution.png)
+
+#### Identify correlations
+
+!["Correlation"](./images/correlation_plot.png)
