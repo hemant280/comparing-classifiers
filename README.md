@@ -35,7 +35,9 @@ Following steps taken to prepare and train model.
     - logistic regression
     - decision trees
     - support vector machines
-- Model evaluation (compare the performance)
+- Model Comparision
+- Improving the Model
+- Evaluation Report
 
 <hr/>
 
@@ -266,7 +268,7 @@ dtypes: float64(5), int64(1), int8(10)
 !["Target Variable distribution"](./images/target_variable_distribution.png)
 
 
-#### Split the dataset for training and testing
+### Split the dataset for training and testing
 - Address Data Imbalance using SMOTE
     - Shape of: (Training Dataset before and after SMOTE)
         - x_train before: (32950, 19)
@@ -279,16 +281,31 @@ dtypes: float64(5), int64(1), int8(10)
     - Target Variable distribution after SMOTE
     !["Target Variable distribution after SMOTE"](./images/smote_target_variable.png)
 
-#### Principal Component Analysis (PCA) to reduce the feature count
+### Principal Component Analysis (PCA) to reduce the feature count
 
 We want to reduce the dimensionality, we will use Principal Component Analysis to get the principal components and reduce the dimensionality
 
 - Standardize features before PCA, as it is sensitive to the scale of the data.
 - Calculate the number of components to explain 95% variance
-    - Number of components to capture 95% variance: 15
+    - Number of components to capture 95% variance: 14
     !["PCA Component Ratio"](./images/pca_component_ratio.png)
+    - Top contributing features for each principal component:
+        - PC1: ['contact', 'cons.price.idx', 'previous', 'poutcome', 'default']
+        - PC2: ['poutcome', 'pdays', 'cons.conf.idx', 'marital', 'age']
+        - PC3: ['age', 'pdays', 'marital', 'previous', 'education']
+        - PC4: ['month', 'contact', 'poutcome', 'previous', 'age']
+        - PC5: ['job', 'cons.conf.idx', 'campaign', 'education', 'pdays']
+        - PC6: ['day_of_week', 'campaign', 'education', 'job', 'housing']
+        - PC7: ['loan', 'housing', 'day_of_week', 'month', 'contact']
+        - PC8: ['job', 'default', 'marital', 'day_of_week', 'housing']
+        - PC9: ['housing', 'loan', 'day_of_week', 'month', 'job']
+        - PC10: ['campaign', 'day_of_week', 'default', 'job', 'housing']
+        - PC11: ['cons.conf.idx', 'marital', 'job', 'default', 'cons.price.idx']
+        - PC12: ['education', 'cons.price.idx', 'month', 'campaign', 'job']
+        - PC13: ['education', 'default', 'month', 'cons.price.idx', 'cons.conf.idx']
+        - PC14: ['age', 'marital', 'default', 'cons.conf.idx', 'cons.price.idx'] 
 
-#### Training and Fiting the model (classifiers):
+### Training and Fiting the model (classifiers):
 
 Summary of Classifier Performance:
 | Model | Train Time (s) | Train Accuracy | Test Accuracy |
@@ -299,5 +316,79 @@ Summary of Classifier Performance:
 | Support Vector Machine | 39.0779 | 0.7891 | 0.4959 |
 
 !["Comparision"](./images/classifier_accuracy_comparision.png)
-    
 
+Model Comarision with training times 
+
+!["Comparision with Training Time"](./images/model_performance_comparison.png)
+
+### Model Comparision
+The 'Decision Tree' classifiers perfrmes for this dataset with training accuracy of 0.9962 and training time of 1.39 seconds, across other classifiers such as K-Nearest Neighbors, Logistic Regression, Support Vector Machine
+
+### Improving the Model
+- Remove features to determine impact
+    Based on top contributing features for each principal componentthe removing day_of_week or housing will not have impact to the performance of the classifiers
+
+- Tune hyper parameters 
+    Defined the pipeline with a placeholder for the classifier, included PCA as a step, so it will be correctly handled by GridSearchCV, tried with different number of components considering the compute (limited to max 3 component)
+
+    Defined the hyperparameter grids for each classifier, the default parameters are set to avoid linter errors, the classifier values will be replaced in the param_grids
+
+    ```
+    param_grids = {
+        'K-Nearest Neighbors': {
+            'pca__n_components': pca_components_to_try,
+            'classifier': [KNeighborsClassifier(n_neighbors=5)],
+            'classifier__n_neighbors': [3, 5, 7, 9],
+            'classifier__weights': ['uniform', 'distance']
+        },
+        'Logistic Regression': {
+            'pca__n_components': pca_components_to_try,
+            'classifier': [LogisticRegression(solver='liblinear', random_state=42)],
+            'classifier__C': [0.1, 1, 10],
+            'classifier__penalty': ['l1', 'l2']
+        },
+        'Decision Tree': {
+            'pca__n_components': pca_components_to_try,
+            'classifier': [DecisionTreeClassifier(random_state=42,ccp_alpha=0.01)],
+            'classifier__max_depth': [3, 5, 7, 10, None],
+            'classifier__ccp_alpha': [0.0, 0.01, 0.1],
+            'classifier__min_samples_split': [2, 5, 10]
+        },
+        'Support Vector Machine': {
+            'pca__n_components': pca_components_to_try,
+            'classifier': [SVC(random_state=42,gamma='scale', C=1.0, kernel='rbf')],
+            'classifier__C': [0.1, 1, 10],
+            'classifier__kernel': ['linear', 'rbf'],
+            'classifier__gamma': ['scale', 'auto']
+        }
+    }
+    ```
+    #### GridSearchCV execution logs:
+    <hr/>
+    - Running GridSearchCV for K-Nearest Neighbors...
+        - Fitting 5 folds for each of 24 candidates, totalling 120 fits
+        - Best parameters for K-Nearest Neighbors: {'classifier': KNeighborsClassifier(), 'classifier__n_neighbors': 3, 'classifier__weights': 'distance', 'pca__n_components': 3}
+        - Best cross-validation accuracy for K-Nearest Neighbors: 0.6811
+    <hr/>
+    - Running GridSearchCV for Logistic Regression...
+        - Fitting 5 folds for each of 18 candidates, totalling 90 fits
+        - Best parameters for Logistic Regression: {'classifier': LogisticRegression(random_state=42, solver='liblinear'), 'classifier__C': 0.1, 'classifier__penalty': 'l1', 'pca__n_components': 1}
+        - Best cross-validation accuracy for Logistic Regression: 0.5073
+    <hr/>
+    - Running GridSearchCV for Decision Tree...
+        - Fitting 5 folds for each of 45 candidates, totalling 225 fits
+        - Best parameters for Decision Tree: {'classifier': DecisionTreeClassifier(random_state=42), 'classifier__max_depth': None, 'classifier__min_samples_split': 2, 'pca__n_components': 3}
+        - Best cross-validation accuracy for Decision Tree: 0.6423
+    <hr/>
+    - Running GridSearchCV for Support Vector Machine...
+        - Fitting 5 folds for each of 36 candidates, totalling 180 fits
+        - Best parameters for Support Vector Machine: {'classifier': SVC(random_state=42), 'classifier__C': 10, 'classifier__gamma': 'auto', 'classifier__kernel': 'rbf', 'pca__n_components': 3}
+        - Best cross-validation accuracy for Support Vector Machine: 0.5086
+
+    **Evaluating best estimators on the test set:**
+    - Test accuracy for tuned K-Nearest Neighbors: 0.7050
+    - Test accuracy for tuned Logistic Regression: 0.6787
+    - Test accuracy for tuned Decision Tree: 0.6816
+    - Test accuracy for tuned Support Vector Machine: 0.7521
+
+    
