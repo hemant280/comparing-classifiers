@@ -26,12 +26,11 @@ Following steps taken to prepare and train model.
 - Preprocessing numerical columns
 - Preprocessing categorical columns
 - Identify correlations
-- Principal Component Analysis (PCA) to reduce the feature count
-- Split the dataset for training and testing
 - Fixing the class imbalance using SMOTE
     - _Additional python library is required (imbalanced-learn) (check the requirement.txt)_
-
-- Fiting the model (classifiers):
+- Split the dataset for training and testing
+- Principal Component Analysis (PCA) to reduce the feature count
+- Training and Fiting the model (classifiers):
     - k-nearest neighbors 
     - logistic regression
     - decision trees
@@ -225,11 +224,80 @@ dtypes: float64(8), int64(1), int8(11)
 memory usage: 3.3 MB
 ```
 
+#### Identify correlations
+
+!["Correlation"](./images/correlation_plot.png)
+
+Using 0.8 as a threshold for what I consider a "high" correlation
+
+- ('euribor3m', 'emp.var.rate', 0.9722), 
+- ('nr.employed', 'emp.var.rate', 0.9088), 
+- ('nr.employed', 'euribor3m', 0.9464)
+
+We will drop euribor3m, emp.var.rate and nr.employed variables from future dataframe
+
+```
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 41188 entries, 0 to 41187
+Data columns (total 16 columns):
+ #   Column          Non-Null Count  Dtype  
+---  ------          --------------  -----  
+ 0   job             41188 non-null  int8   
+ 1   marital         41188 non-null  int8   
+ 2   education       41188 non-null  int8   
+ 3   default         41188 non-null  int8   
+ 4   housing         41188 non-null  int8   
+ 5   loan            41188 non-null  int8   
+ 6   contact         41188 non-null  int8   
+ 7   month           41188 non-null  int8   
+ 8   day_of_week     41188 non-null  int8   
+ 9   poutcome        41188 non-null  int8   
+ 10  age             41188 non-null  float64
+ 11  campaign        41188 non-null  float64
+ 12  pdays           41188 non-null  int64  
+ 13  previous        41188 non-null  float64
+ 14  cons.price.idx  41188 non-null  float64
+ 15  cons.conf.idx   41188 non-null  float64
+dtypes: float64(5), int64(1), int8(10)
+```
 
 **Plot Target variable distribution**
 
 !["Target Variable distribution"](./images/target_variable_distribution.png)
 
-#### Identify correlations
 
-!["Correlation"](./images/correlation_plot.png)
+#### Split the dataset for training and testing
+- Address Data Imbalance using SMOTE
+    - Shape of: (Training Dataset before and after SMOTE)
+        - x_train before: (32950, 19)
+        - y_train before: (32950, 1)
+        - x_train after: (58538, 19)
+        - y_train after: (58538, 1)
+    - Balance of positive and negative classes (%): y
+        - y=0, 50.0%
+        - y=1, 50.0%
+    - Target Variable distribution after SMOTE
+    !["Target Variable distribution after SMOTE"](./images/smote_target_variable.png)
+
+#### Principal Component Analysis (PCA) to reduce the feature count
+
+We want to reduce the dimensionality, we will use Principal Component Analysis to get the principal components and reduce the dimensionality
+
+- Standardize features before PCA, as it is sensitive to the scale of the data.
+- Calculate the number of components to explain 95% variance
+    - Number of components to capture 95% variance: 15
+    !["PCA Component Ratio"](./images/pca_component_ratio.png)
+
+#### Training and Fiting the model (classifiers):
+
+Summary of Classifier Performance:
+| Model | Train Time (s) | Train Accuracy | Test Accuracy |
+| ----- | ---------- | -------------  | -----------   |
+| K-Nearest Neighbors | 0.0246 | 0.9033 | 0.5307 |
+| Logistic Regression | 0.0396 | 0.6926 | 0.5276 |
+| Decision Tree | 1.3915 | 0.9962 | 0.5806 |
+| Support Vector Machine | 39.0779 | 0.7891 | 0.4959 |
+
+!["Comparision"](./images/classifier_accuracy_comparision.png)
+    
+
